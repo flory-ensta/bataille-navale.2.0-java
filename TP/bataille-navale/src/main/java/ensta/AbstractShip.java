@@ -9,11 +9,11 @@ public class AbstractShip {
     private int size;
     private Direction direction;
 
-    public String getLabel() {
+    public Character getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(Character label) {
         this.label = label;
     }
 
@@ -46,6 +46,9 @@ public class AbstractShip {
         this.name = name;
         this.size = size;
         this.direction = direction;
+    }
+
+    public AbstractShip() {
     }
 
     @Override

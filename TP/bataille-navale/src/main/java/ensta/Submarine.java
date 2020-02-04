@@ -4,14 +4,11 @@ package ensta;
  * Submarine
  */
 public class Submarine extends AbstractShip {
+    public Submarine(Direction direction) {
+        super('S', "Submarine", 3, direction);
+    }
     public Submarine() {
-        this.label = 'S';
-        this.name = "Submarine";
-        this.size = 3;
-        this.direction = EAST;
+        this(Direction.EAST);
     }
 
-    public Submarine(Direction direction) {
-        this.direction = direction;
-    }
 }

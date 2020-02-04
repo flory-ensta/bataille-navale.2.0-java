@@ -7,16 +7,12 @@ import java.nio.channels.spi.AbstractSelectableChannel;
  */
 public class Destroyer extends AbstractShip {
 
+    public Destroyer(Direction direction) {
+        super('D', "Destroyer", 2, direction);
+    }
     public Destroyer() {
-        this.label = 'D';
-        this.name = "Destroyer";
-        this.size = 2;
-        this.direction = EAST;
+        this(Direction.EAST);
     }
 
-    public Destroyer(DIrection direction) {
-        Destroyer();
-        this.direction = direction;
-    }
 
 }

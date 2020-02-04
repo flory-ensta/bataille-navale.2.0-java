@@ -4,14 +4,11 @@ package ensta;
  * Carrier
  */
 public class Carrier extends AbstractShip {
+    public Carrier(Direction direction) {
+        super('C', "Aircraft Carrier", 5, direction);
+    }
     public Carrier() {
-        this.label = 'C';
-        this.name = "Aircraft Carrier";
-        this.size = 5;
-        this.direction = EAST;
+        this(Direction.EAST);
     }
 
-    public Carrier(Direction direction) {
-        this.direction = direction;
-    }
 }
