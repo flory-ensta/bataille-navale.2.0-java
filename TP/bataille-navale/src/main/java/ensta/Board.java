@@ -74,6 +74,11 @@ public class Board {
     }
 
     public void printBoards() {
+        System.out.print("Navires :");
+        for (int i = 1; i < size - 1; i++) {
+            System.out.print("  ");
+        }
+        System.out.println(" Frappes :");
         System.out.print("   ");
         for (int i = 0; i < size; i++) {
             System.out.print(charArray[i].toString() + " ");
