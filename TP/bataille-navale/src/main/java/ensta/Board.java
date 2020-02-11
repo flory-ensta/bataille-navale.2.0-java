@@ -124,7 +124,6 @@ public class Board {
     }
 
     void putShip(AbstractShip ship, int x, int y) throws OutOfBound, IncorrectPosition {
-        x--;
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         switch (ship.getDirection()) {
@@ -147,15 +146,6 @@ public class Board {
                 this.boats_array[x + i][y] = ship.getLabel();
             break;
         case WEST:
-            if (y + ship.getSize() - 1 >= size)
-                throw new OutOfBound("Positions incorrectes");
-            for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x][y + i] != null)
-                    throw new IncorrectPosition("A ship is already at this position");
-            for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x][y + i] = ship.getLabel();
-            break;
-        case EAST:
             if (y - ship.getSize() + 1 < 0)
                 throw new OutOfBound("Positions incorrectes");
             for (int i = 0; i < ship.getSize(); i++)
@@ -164,26 +154,34 @@ public class Board {
             for (int i = 0; i < ship.getSize(); i++)
                 this.boats_array[x][y - i] = ship.getLabel();
             break;
+
+        case EAST:
+            if (y + ship.getSize() - 1 >= size)
+                throw new OutOfBound("Positions incorrectes");
+            for (int i = 0; i < ship.getSize(); i++)
+                if (this.boats_array[x][y + i] != null)
+                    throw new IncorrectPosition("A ship is already at this position");
+            for (int i = 0; i < ship.getSize(); i++)
+                this.boats_array[x][y + i] = ship.getLabel();
+            break;
+
         }
 
     }
 
     boolean hasShip(int x, int y) throws OutOfBound {
-        x--;
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         return (boats_array[x][y] != null);
     }
 
     void setHit(boolean hit, int x, int y) throws OutOfBound {
-        x--;
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         hits_array[x][y] = hit;
     }
 
     boolean getHit(int x, int y) throws OutOfBound {
-        x--;
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         return hits_array[x][y];
