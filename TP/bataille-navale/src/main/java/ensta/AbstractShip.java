@@ -3,14 +3,23 @@ package ensta;
 /**
  * AbstractShip
  */
-public class AbstractShip {
+public class  AbstractShip {
     private Character label;
     private String name;
     private int size;
     private Direction direction;
+    private int strike_count;
 
     public String getLabel() {
         return label;
+    }
+
+    public void addStrike() {
+        strike_count++;
+    }
+
+    public boolean isSunk() {
+        return (strike_count==size);
     }
 
     public void setLabel(String label) {
