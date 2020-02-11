@@ -7,14 +7,14 @@ public class Board {
     private Character[] charArray = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
     protected String name;
-    protected Character[][] boats_array;
-    protected boolean[][] hits_array;
+    protected ShipState[][] boats_array;
+    protected Boolean[][] hits_array;
     protected int size;
 
     public Board(String name, int size) { // Check size < 26 later)
         this.name = name;
-        this.boats_array = new Character[size][size];
-        this.hits_array = new boolean[size][size];
+        this.boats_array = new ShipState[size][size];
+        this.hits_array = new Boolean[size][size];
         this.size = size;
     }
 
@@ -64,10 +64,12 @@ public class Board {
             else
                 System.out.print(i + " ");
             for (int j = 1; j <= size; j++) {
-                if (!hits_array[i - 1][j - 1])
+                if (hits_array[i - 1][j - 1]==null)
                     System.out.print(". ");
-                if (hits_array[i - 1][j - 1])
+                if (!hits_array[i - 1][j - 1])
                     System.out.print("x ");
+                else 
+                    System.out.print(ColorUtil.colorize("x ",ColorUtil.Color.RED));
             }
             System.out.println("");
         }
