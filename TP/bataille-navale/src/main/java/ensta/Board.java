@@ -3,7 +3,7 @@ package ensta;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-public class Board {
+public class Board /* implements IBoard?? */ {
     private Character[] charArray = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
     protected String name;
@@ -186,20 +186,54 @@ public class Board {
     boolean hasShip(int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
-        return (boats_array[x][y] != null);
+        if ((boats_array[x][y].getShip() != null) && (boats_array[x][y].getShip().isSunk()))
+            return false;
+        return (boats_array[x][y].getShip() != null);
     }
 
-    void setHit(boolean hit, int x, int y) throws OutOfBound {
+    void setHit(Boolean hit, int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         hits_array[x][y] = hit;
     }
 
-    boolean getHit(int x, int y) throws OutOfBound {
+    Boolean getHit(int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         return hits_array[x][y];
     }
+
+    Hit sendHit(int x, int y) {
+        try {
+
+            if (this.hasShip(x, y)) {
+                AbstractShip ship_at_hitpoint = boats_array[x][y].getShip();
+                setHit(true, x, y);
+                boats_array[x][y].addStrike();
+                if (ship_at_hitpoint.isSunk()) {
+                    switch (ship_at_hitpoint.getLabel()) {
+                    case 'B':
+                        System.out.println("Battleship sunk");
+                        return Hit.BATTLESHIP;
+                    case 'C':
+                        System.out.println("Aircraft Carrier sunk");
+                        return Hit.CARRIER;
+                    case 'D':
+                        System.out.println("Destroyer sunk");
+                        return Hit.DESTROYER;
+                    case 'S':
+                        System.out.println("Submarine sunk");
+                        return Hit.SUBMARINE;
+                    }
+                }
+                return Hit.STIKE;
+            }
+            setHit(false, x, y);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return Hit.MISS;
+    };
 
     public static void main(String[] args) {
     }
