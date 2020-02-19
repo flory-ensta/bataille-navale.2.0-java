@@ -57,13 +57,12 @@ public class Player {
             }
             boolean success = false;
             try {
-                System.out.print(res.x + " ");
-                System.out.println(res.y);
                 board.putShip(s, res.y,res.x);
                 success = true;
             } catch (Exception e) {
                 System.out.println(e);
             } finally {
+                
                 if (success) {
                     ++i;  
                     done = i == 4;         

@@ -11,9 +11,12 @@ public class Board {
     protected Boolean[][] hits_array;
     protected int size;
 
-    public Board(String name, int size) { // Check size < 26 later)
+    public Board(String name, int size) { // ( Check size < 26 later)
         this.name = name;
         this.boats_array = new ShipState[size][size];
+        for (int i = 0; i < boats_array.length; i++)
+            for (int j = 0; j < boats_array[0].length; j++)
+                boats_array[i][j] = new ShipState();
         this.hits_array = new Boolean[size][size];
         this.size = size;
     }
@@ -42,38 +45,38 @@ public class Board {
     // }
     // }
 
-    private void printBoats() {
-        printFirstLine();
-        for (int i = 1; i <= size; i++) {
-            if (i < 10)
-                System.out.print(i + "  ");
-            else
-                System.out.print(i + " ");
-            for (int j = 1; j <= size; j++) {
-                System.out.print(". ");
-            }
-            System.out.println("");
-        }
-    }
+    // private void printBoats() {
+    // printFirstLine();
+    // for (int i = 1; i <= size; i++) {
+    // if (i < 10)
+    // System.out.print(i + " ");
+    // else
+    // System.out.print(i + " ");
+    // for (int j = 1; j <= size; j++) {
+    // System.out.print(". ");
+    // }
+    // System.out.println("");
+    // }
+    // }
 
-    private void printHits() {
-        printFirstLine();
-        for (int i = 1; i <= size; i++) {
-            if (i < 10)
-                System.out.print(i + "  ");
-            else
-                System.out.print(i + " ");
-            for (int j = 1; j <= size; j++) {
-                if (hits_array[i - 1][j - 1]==null)
-                    System.out.print(". ");
-                if (!hits_array[i - 1][j - 1])
-                    System.out.print("x ");
-                else 
-                    System.out.print(ColorUtil.colorize("x ",ColorUtil.Color.RED));
-            }
-            System.out.println("");
-        }
-    }
+    // private void printHits() {
+    // printFirstLine();
+    // for (int i = 1; i <= size; i++) {
+    // if (i < 10)
+    // System.out.print(i + " ");
+    // else
+    // System.out.print(i + " ");
+    // for (int j = 1; j <= size; j++) {
+    // if (hits_array[i - 1][j - 1] == null)
+    // System.out.print(". ");
+    // if (!hits_array[i - 1][j - 1])
+    // System.out.print("x ");
+    // else
+    // System.out.print(ColorUtil.colorize("x ", ColorUtil.Color.RED));
+    // }
+    // System.out.println("");
+    // }
+    // }
 
     public void printBoards() {
         System.out.print("Navires :");
@@ -101,7 +104,7 @@ public class Board {
                 if (boats_array[i - 1][j] == null)
                     System.out.print(". ");
                 else
-                    System.out.print(boats_array[i - 1][j] + " ");
+                    System.out.print(boats_array[i - 1][j].toString() + " ");
             }
             System.out.print("   ");
             if (i < 10)
@@ -109,22 +112,25 @@ public class Board {
             else
                 System.out.print(i + " ");
             for (int j = 0; j < size; j++) {
-                if (!hits_array[i - 1][j])
+                if (hits_array[i - 1][j] == null)
                     System.out.print(". ");
-                else
+                else if (!hits_array[i - 1][j])
                     System.out.print("x ");
+                else
+                    System.out.print(ColorUtil.colorize("x ", ColorUtil.Color.RED));
+
             }
             System.out.println("");
         }
 
     }
 
-    public void print() {
-        System.out.println("Navires :");
-        printBoats();
-        System.out.println("Frappes :");
-        printHits();
-    }
+    // public void print() {
+    // System.out.println("Navires :");
+    // printBoats();
+    // System.out.println("Frappes :");
+    // printHits();
+    // }
 
     public int getSize() {
         return this.size;
@@ -138,38 +144,39 @@ public class Board {
             if (x - ship.getSize() + 1 < 0)
                 throw new OutOfBound("Positions incorrectes");
             for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x - i][y] != null)
+                if (this.boats_array[x - i][y].getShip() != null)
                     throw new IncorrectPosition("A ship is already at this position");
-            for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x - i][y] = ship.getLabel();
+            for (int i = 0; i < ship.getSize(); i++) {
+                this.boats_array[x - i][y].setShip(ship);
+            }
             break;
         case SOUTH:
             if (x + ship.getSize() - 1 >= size)
                 throw new OutOfBound("Positions incorrectes");
             for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x + i][y] != null)
+                if (this.boats_array[x + i][y].getShip() != null)
                     throw new IncorrectPosition("A ship is already at this position");
             for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x + i][y] = ship.getLabel();
+                this.boats_array[x + i][y].setShip(ship);
             break;
         case WEST:
             if (y - ship.getSize() + 1 < 0)
                 throw new OutOfBound("Positions incorrectes");
             for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x][y - 1] != null)
+                if (this.boats_array[x][y - 1].getShip() != null)
                     throw new IncorrectPosition("A ship is already at this position");
             for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x][y - i] = ship.getLabel();
+                this.boats_array[x][y - i].setShip(ship);
             break;
 
         case EAST:
             if (y + ship.getSize() - 1 >= size)
                 throw new OutOfBound("Positions incorrectes");
             for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x][y + i] != null)
+                if (this.boats_array[x][y + i].getShip() != null)
                     throw new IncorrectPosition("A ship is already at this position");
             for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x][y + i] = ship.getLabel();
+                this.boats_array[x][y + i].setShip(ship);
             break;
 
         }

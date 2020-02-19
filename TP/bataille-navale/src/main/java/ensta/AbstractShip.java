@@ -22,7 +22,7 @@ public class  AbstractShip {
         return (strike_count==size);
     }
 
-    public void setLabel(String label) {
+    public void setLabel(Character label) {
         this.label = label;
     }
 
