@@ -28,51 +28,28 @@ public class Game {
     public Game init() {
         if (!loadSave()) {
             // init attributes
+            sin = new Scanner(System.in);
             System.out.println("entre ton nom:");
 
-            // Done use a scanner to read player name
+            // DONE use a scanner to read player name
             String username = sin.nextLine();
 
-            // Done init boards
+            // DONE init boards
             Board b1, b2;
             b1 = new Board(username, 15);
             b2 = new Board("AI", 15);
-            // Done init this.player1 & this.player2
+            // DONE init this.player1 & this.player2 
+            List<AbstractShip> ships1 = createDefaultShips();
+            this.player1 = new Player(b1, b2, ships1);
+            List<AbstractShip> ships2 = createDefaultShips();
+            this.player2 = new AIPlayer(b2, b1, ships2);
 
-            // // Init player 1 
-            /// !!!!!!!!!!!!!! USE LA FONCTION DU BAS DE LA PAGE //////
-            // AbstractShip myShip1 = new Battleship();
-            // AbstractShip myShip2 = new Carrier();
-            // AbstractShip myShip3 = new Submarine();
-            // AbstractShip myShip4 = new Submarine();
-            // AbstractShip myShip5 = new Destroyer();
-            // List<AbstractShip> ships1 = new ArrayList<AbstractShip>();
-            // ships1.add(myShip1);
-            // ships1.add(myShip2);
-            // ships1.add(myShip3);
-            // ships1.add(myShip4);
-            // ships1.add(myShip5);
-            // player1 = new Player(b1, b2, ships1);
-            
-            // // Init player 2 (AI)
-            // AbstractShip aiShip1 = new Battleship();
-            // AbstractShip aiShip2 = new Carrier();
-            // AbstractShip aiShip3 = new Submarine();
-            // AbstractShip aiShip4 = new Submarine();
-            // AbstractShip aiShip5 = new Destroyer();
-            // List<AbstractShip> ships2 = new ArrayList<AbstractShip>();
-            // ships2.add(aiShip1);
-            // ships2.add(aiShip2);
-            // ships2.add(aiShip3);
-            // ships2.add(aiShip4);
-            // ships2.add(aiShip5);
-            // player2 = new AIPlayer(b2, b1, ships2);
 
             System.out.println("Bonne chance " + username);
             b1.print();
             // place player ships
-            player1.putShips();
-            player2.putShips();
+            player1.putShips(); ///////////////// IL N'EN PLACE QUE 4 CA A DU ETRE HARDCODE
+            player2.putShips(); ///////////////// Si l'IA déborde il n'a pas le droit de replacer son boat 
         }
         return this;
     }
@@ -81,18 +58,25 @@ public class Game {
      * *** Méthodes
      */
     public void run() {
-        int[] coords = new int[2];
+        int[] coords = new int[2] ;
         Board b1 = player1.board;
+        Board b2 = player2.board; //// TODO Remove this 
         Hit hit;
 
         // main loop
         b1.print();
         boolean done;
         do {
-            hit = Hit.MISS; // Done player1 send a hit
-            // hit = player1.sendHit(coords);
-            boolean strike = hit != Hit.MISS; // Done set this hit on his board (b1)
-            // b1.setHit(hit,coords[0],coords[1]);
+            hit = Hit.MISS; // DONE player1 send a hit
+            b2.print(); // TODO Remove
+            hit = player1.sendHit(coords);
+            boolean strike = hit != Hit.MISS; // DONE set this hit on his board (b1)
+            try {
+                
+                b1.setHit(strike,coords[0],coords[1]); /// WE INVERTED???
+            } catch (Exception e) {
+               System.out.println(e);
+            }
 
             done = updateScore();
             b1.print();
@@ -102,8 +86,8 @@ public class Game {
 
             if (!done && !strike) {
                 do {
-                    hit = Hit.MISS; // Done player2 send a hit.
-                    // player2.sendHit(coords);
+                    hit = Hit.MISS; // DONE player2 send a hit.
+                    player2.sendHit(coords);
 
                     strike = hit != Hit.MISS;
                     if (strike) {
@@ -186,7 +170,7 @@ public class Game {
                 color = ColorUtil.Color.RED;
         }
         msg = String.format("%s Frappe en %c%d : %s", incoming ? "<=" : "=>", ((char) ('A' + coords[0])),
-                (coords[1] + 1), msg);
+                (coords[1] + 1), msg); /////////////// WE INVERTED THERE On a le problème suivant : Les coordonnées écrites ici ne correspondent que pour l'un des deux joueurs. Et les hits apparaissent en trop sur l'opponent board.
         return ColorUtil.colorize(msg, color);
     }
 
@@ -194,4 +178,5 @@ public class Game {
         return Arrays.asList(new AbstractShip[] { new Destroyer(), new Submarine(), new Submarine(), new Battleship(),
                 new Carrier() });
     }
+
 }
