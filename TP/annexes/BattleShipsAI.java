@@ -1,3 +1,5 @@
+package ensta;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -67,6 +69,12 @@ public class BattleShipsAI implements Serializable {
         for (AbstractShip s : ships) {
             do {
                 // TODO use Random to pick a random x, y & orientation
+
+                x = rnd.nextInt((this.size) + 1);
+                y = rnd.nextInt((this.size) + 1);
+                o = orientations[rnd.nextInt(4)];
+                s.setDirection(o);
+
             } while (!canPutShip(s, x, y));
             board.putShip(s, x, y);
         }
