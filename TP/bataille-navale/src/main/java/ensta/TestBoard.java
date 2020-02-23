@@ -20,12 +20,12 @@ public class TestBoard {
 
         Player player = new Player(myOtherBoard, oponnentBoard, ships);
         player.putShips();
-        myOtherBoard.printBoards();
+        myOtherBoard.print();
         int[] coords = new int[2];
         player.sendHit(coords);
-        System.out.println(coords[0]+ " " + coords[1]);
+        System.out.println(coords[0] + " " + coords[1]);
 
-        oponnentBoard.printBoards();
+        oponnentBoard.print();
 
     }
 }

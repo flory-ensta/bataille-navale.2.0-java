@@ -66,7 +66,7 @@ public class Player {
                     done = i == 4;
                 }
 
-                board.printBoards();
+                board.print();
             }
         } while (!done);
     }
