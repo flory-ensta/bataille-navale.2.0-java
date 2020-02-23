@@ -8,8 +8,8 @@ public class App {
     public static void main(String[] args) {
         // System.out.println("Hello World!");
         Board myBoard = new Board("myBoard");
-        myBoard.printBoards();
+        myBoard.print();
         Board myOtherBoard = new Board("myOtherBoard", 15);
-        myOtherBoard.printBoards();
+        myOtherBoard.print();
     }
 }

@@ -27,6 +27,9 @@ public enum Hit {
     /* ***
      * Méthodes
      */
+    public int getValue() {
+        return value;
+    }
     public static Hit fromInt(int value) {
         for (Hit hit : Hit.values()) {
             if (hit.value == value) {

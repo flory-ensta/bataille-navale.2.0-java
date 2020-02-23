@@ -3,7 +3,7 @@ package ensta;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-public class Board /* implements IBoard?? */ {
+public class Board implements IBoard {
     private Character[] charArray = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
     protected String name;
@@ -37,48 +37,7 @@ public class Board /* implements IBoard?? */ {
         System.out.println("");
     }
 
-    // private initGrids() {
-    // for (int i = 0; i < size; i++)
-    // for (int j = 0; j < size; j++) {
-    // hits_array[i][j] = false;
-    // boats_array[i][j] = '.';
-    // }
-    // }
-
-    // private void printBoats() {
-    // printFirstLine();
-    // for (int i = 1; i <= size; i++) {
-    // if (i < 10)
-    // System.out.print(i + " ");
-    // else
-    // System.out.print(i + " ");
-    // for (int j = 1; j <= size; j++) {
-    // System.out.print(". ");
-    // }
-    // System.out.println("");
-    // }
-    // }
-
-    // private void printHits() {
-    // printFirstLine();
-    // for (int i = 1; i <= size; i++) {
-    // if (i < 10)
-    // System.out.print(i + " ");
-    // else
-    // System.out.print(i + " ");
-    // for (int j = 1; j <= size; j++) {
-    // if (hits_array[i - 1][j - 1] == null)
-    // System.out.print(". ");
-    // if (!hits_array[i - 1][j - 1])
-    // System.out.print("x ");
-    // else
-    // System.out.print(ColorUtil.colorize("x ", ColorUtil.Color.RED));
-    // }
-    // System.out.println("");
-    // }
-    // }
-
-    public void printBoards() {
+    public void print() {
         System.out.print("Navires :");
         for (int i = 1; i < size - 1; i++) {
             System.out.print("  ");
@@ -125,85 +84,79 @@ public class Board /* implements IBoard?? */ {
 
     }
 
-    // public void print() {
-    // System.out.println("Navires :");
-    // printBoats();
-    // System.out.println("Frappes :");
-    // printHits();
-    // }
-
     public int getSize() {
         return this.size;
     }
 
-    void putShip(AbstractShip ship, int x, int y) throws OutOfBound, IncorrectPosition {
+    @Override
+    public void putShip(AbstractShip ship, int x, int y) throws OutOfBound, IncorrectPosition {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         switch (ship.getDirection()) {
-        case NORTH:
-            if (x - ship.getSize() + 1 < 0)
-                throw new OutOfBound("Positions incorrectes");
-            for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x - i][y].getShip() != null)
-                    throw new IncorrectPosition("A ship is already at this position");
-            for (int i = 0; i < ship.getSize(); i++) {
-                this.boats_array[x - i][y].setShip(ship);
-            }
-            break;
-        case SOUTH:
-            if (x + ship.getSize() - 1 >= size)
-                throw new OutOfBound("Positions incorrectes");
-            for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x + i][y].getShip() != null)
-                    throw new IncorrectPosition("A ship is already at this position");
-            for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x + i][y].setShip(ship);
-            break;
-        case WEST:
-            if (y - ship.getSize() + 1 < 0)
-                throw new OutOfBound("Positions incorrectes");
-            for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x][y - 1].getShip() != null)
-                    throw new IncorrectPosition("A ship is already at this position");
-            for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x][y - i].setShip(ship);
-            break;
+            case NORTH:
+                if (x - ship.getSize() + 1 < 0)
+                    throw new OutOfBound("Positions incorrectes");
+                for (int i = 0; i < ship.getSize(); i++)
+                    if (this.boats_array[x - i][y].getShip() != null)
+                        throw new IncorrectPosition("A ship is already at this position");
+                for (int i = 0; i < ship.getSize(); i++) {
+                    this.boats_array[x - i][y].setShip(ship);
+                }
+                break;
+            case SOUTH:
+                if (x + ship.getSize() - 1 >= size)
+                    throw new OutOfBound("Positions incorrectes");
+                for (int i = 0; i < ship.getSize(); i++)
+                    if (this.boats_array[x + i][y].getShip() != null)
+                        throw new IncorrectPosition("A ship is already at this position");
+                for (int i = 0; i < ship.getSize(); i++)
+                    this.boats_array[x + i][y].setShip(ship);
+                break;
+            case WEST:
+                if (y - ship.getSize() + 1 < 0)
+                    throw new OutOfBound("Positions incorrectes");
+                for (int i = 0; i < ship.getSize(); i++)
+                    if (this.boats_array[x][y - 1].getShip() != null)
+                        throw new IncorrectPosition("A ship is already at this position");
+                for (int i = 0; i < ship.getSize(); i++)
+                    this.boats_array[x][y - i].setShip(ship);
+                break;
 
-        case EAST:
-            if (y + ship.getSize() - 1 >= size)
-                throw new OutOfBound("Positions incorrectes");
-            for (int i = 0; i < ship.getSize(); i++)
-                if (this.boats_array[x][y + i].getShip() != null)
-                    throw new IncorrectPosition("A ship is already at this position");
-            for (int i = 0; i < ship.getSize(); i++)
-                this.boats_array[x][y + i].setShip(ship);
-            break;
+            case EAST:
+                if (y + ship.getSize() - 1 >= size)
+                    throw new OutOfBound("Positions incorrectes");
+                for (int i = 0; i < ship.getSize(); i++)
+                    if (this.boats_array[x][y + i].getShip() != null)
+                        throw new IncorrectPosition("A ship is already at this position");
+                for (int i = 0; i < ship.getSize(); i++)
+                    this.boats_array[x][y + i].setShip(ship);
+                break;
 
         }
 
     }
 
-    boolean hasShip(int x, int y) throws OutOfBound {
+    public boolean hasShip(int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         if ((boats_array[x][y].getShip() != null) && (boats_array[x][y].getShip().isSunk()))
             return false;
         return (boats_array[x][y].getShip() != null);
     }
-
-    void setHit(Boolean hit, int x, int y) throws OutOfBound {
+    @Override
+    public void setHit(Boolean hit, int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         hits_array[x][y] = hit;
     }
-
-    Boolean getHit(int x, int y) throws OutOfBound {
+    @Override
+    public Boolean getHit(int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         return hits_array[x][y];
     }
-
-    Hit sendHit(int x, int y) {
+    @Override
+    public Hit sendHit(int x, int y) {
         try {
 
             if (this.hasShip(x, y)) {
@@ -212,18 +165,18 @@ public class Board /* implements IBoard?? */ {
                 boats_array[x][y].addStrike();
                 if (ship_at_hitpoint.isSunk()) {
                     switch (ship_at_hitpoint.getLabel()) {
-                    case 'B':
-                        System.out.println("Battleship sunk");
-                        return Hit.BATTLESHIP;
-                    case 'C':
-                        System.out.println("Aircraft Carrier sunk");
-                        return Hit.CARRIER;
-                    case 'D':
-                        System.out.println("Destroyer sunk");
-                        return Hit.DESTROYER;
-                    case 'S':
-                        System.out.println("Submarine sunk");
-                        return Hit.SUBMARINE;
+                        case 'B':
+                            System.out.println("Battleship sunk");
+                            return Hit.BATTLESHIP;
+                        case 'C':
+                            System.out.println("Aircraft Carrier sunk");
+                            return Hit.CARRIER;
+                        case 'D':
+                            System.out.println("Destroyer sunk");
+                            return Hit.DESTROYER;
+                        case 'S':
+                            System.out.println("Submarine sunk");
+                            return Hit.SUBMARINE;
                     }
                 }
                 return Hit.STIKE;
@@ -234,7 +187,4 @@ public class Board /* implements IBoard?? */ {
         }
         return Hit.MISS;
     };
-
-    public static void main(String[] args) {
-    }
 }
