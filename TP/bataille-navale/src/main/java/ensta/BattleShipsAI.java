@@ -75,20 +75,23 @@ public class BattleShipsAI implements Serializable {
             y = rnd.nextInt((this.size) + 1);
             o = orientations[rnd.nextInt(4)];
             ships[i].setDirection(o);
-            boolean success = false; // = false superflu
+            // boolean success = false; // = false superflu
             try {
 
                 board.putShip(ships[i], x, y);
-                success = true;
+                ++i;
+                // success = true;
             } catch (Exception e) {
                 System.out.println(e);
-            } finally {
-                if (success) {
-                    ++i;
-                    done = i == ships.length;
-                }
             }
-        } while (!done);
+            // a virer
+            // finally {
+            // if (success) {
+            // done = i == ships.length;
+            // }
+            // }
+
+        } while (i < ships.length);
 
     }
 
