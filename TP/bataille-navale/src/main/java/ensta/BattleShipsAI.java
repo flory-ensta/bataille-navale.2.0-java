@@ -60,24 +60,31 @@ public class BattleShipsAI implements Serializable {
      * 
      * @param ships the ships to put
      */
-    public void putShips(AbstractShip ships[]) {
+    public void putShips(AbstractShip[] ships) {
         int x, y;
-        AbstractShip.Orientation o;
+        Direction o;
         Random rnd = new Random();
-        AbstractShip.Orientation[] orientations = AbstractShip.Orientation.values();
+        Direction[] orientations = Direction.values();
+        boolean done = false;
+        int i = 0;
 
-        for (AbstractShip s : ships) {
-            do {
-                // TODO use Random to pick a random x, y & orientation
+        do {
+            // TODO use Random to pick a random x, y & orientation
 
-                x = rnd.nextInt((this.size) + 1);
-                y = rnd.nextInt((this.size) + 1);
-                o = orientations[rnd.nextInt(4)];
-                s.setDirection(o);
+            x = rnd.nextInt((this.size) + 1);
+            y = rnd.nextInt((this.size) + 1);
+            o = orientations[rnd.nextInt(4)];
+            ships[i].setDirection(o);
+            // boolean success = false; // = false superflu
+            try {
 
-            } while (!canPutShip(s, x, y));
-            board.putShip(s, x, y);
-        }
+                board.putShip(ships[i], x, y);
+                ++i;
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (i < ships.length);
+
     }
 
     /**
@@ -121,14 +128,22 @@ public class BattleShipsAI implements Serializable {
             res = pickRandomCoord();
         }
 
-        Hit hit = opponent.sendHit(res[0], res[1]);
-        board.setHit(hit != Hit.MISS, res[0], res[1]);
+        Hit hit = opponent.sendHit(res[1], res[0]);
+        try {
+            board.setHit(hit != Hit.MISS, res[1], res[0]);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         if (hit != Hit.MISS) {
             if (lastStrike != null) {
                 lastVertical = guessOrientation(lastStrike, res);
             }
             lastStrike = res;
+        }
+        else {
+            lastVertical = null;
+            lastStrike = null;
         }
 
         coords[0] = res[0];
@@ -141,25 +156,25 @@ public class BattleShipsAI implements Serializable {
      */
 
     private boolean canPutShip(AbstractShip ship, int x, int y) {
-        AbstractShip.Orientation o = ship.getOrientation();
+        Direction o = ship.getDirection();
         int dx = 0, dy = 0;
-        if (o == AbstractShip.Orientation.EAST) {
-            if (x + ship.getLength() >= this.size) {
+        if (o == Direction.EAST) {
+            if (x + ship.getSize() >= this.size) {
                 return false;
             }
             dx = 1;
-        } else if (o == AbstractShip.Orientation.SOUTH) {
-            if (y + ship.getLength() >= this.size) {
+        } else if (o == Direction.SOUTH) {
+            if (y + ship.getSize() >= this.size) {
                 return false;
             }
             dy = 1;
-        } else if (o == AbstractShip.Orientation.NORTH) {
-            if (y + 1 - ship.getLength() < 0) {
+        } else if (o == Direction.NORTH) {
+            if (y + 1 - ship.getSize() < 0) {
                 return false;
             }
             dy = -1;
-        } else if (o == AbstractShip.Orientation.WEST) {
-            if (x + 1 - ship.getLength() < 0) {
+        } else if (o == Direction.WEST) {
+            if (x + 1 - ship.getSize() < 0) {
                 return false;
             }
             dx = -1;
@@ -168,12 +183,17 @@ public class BattleShipsAI implements Serializable {
         int ix = x;
         int iy = y;
 
-        for (int i = 0; i < ship.getLength(); ++i) {
-            if (board.hasShip(ix, iy)) {
-                return false;
+        for (int i = 0; i < ship.getSize(); ++i) {
+            try {
+                if (board.hasShip(ix, iy))
+                    return false;
+
+            } catch (Exception e) {
+                System.out.println(e);
+            } finally {
+                ix += dx;
+                iy += dy;
             }
-            ix += dx;
-            iy += dy;
         }
 
         return true;
@@ -184,7 +204,13 @@ public class BattleShipsAI implements Serializable {
     }
 
     private boolean isUndiscovered(int x, int y) {
-        return x >= 0 && x < size && y >= 0 && y < size && board.getHit(x, y) == null;
+        try {
+            return /* x >= 0 && x < size && y >= 0 && y < size && */ board.getHit(y,
+                    x) == null; /* exception already handled */
+        } catch (Exception e) {
+            System.out.println(e);
+            return false; // Not good for now
+        }
     }
 
     private int[] pickRandomCoord() {

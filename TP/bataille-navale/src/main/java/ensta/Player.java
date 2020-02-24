@@ -1,3 +1,5 @@
+package ensta;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,29 +38,53 @@ public class Player implements java.io.Serializable {
 
         do {
             AbstractShip s = ships[i];
-            String msg = String.format("placer %d : %s(%d)", i + 1, s.getName(), s.getLength());
+            String msg = String.format("placer %d : %s(%d)", i + 1, s.getName(), s.getSize());
             System.out.println(msg);
             InputHelper.ShipInput res = InputHelper.readShipInput();
-            // TODO set ship orientation
-            // TODO put ship at given position
+            switch (res.orientation) {
+                case "n":
+                    s.setDirection(Direction.NORTH);
+                    break;
+                case "s":
+                    s.setDirection(Direction.SOUTH);
+                    break;
+                case "e":
+                    s.setDirection(Direction.EAST);
+                    break;
+                case "w":
+                    s.setDirection(Direction.WEST);
+                    break;
+            }
+            boolean success = false;
+            try {
+                board.putShip(s, res.y, res.x);
+                success = true;
+            } catch (Exception e) {
+                System.out.println(e);
+            } finally {
 
-            // TODO when ship placement successful
-            ++i;
-            done = i == 5;
+                if (success) {
+                    ++i;
+                    done = i == ships.length;
+                }
 
-            board.print();
+                board.print();
+            }
         } while (!done);
     }
 
     public Hit sendHit(int[] coords) {
-        boolean done;
+        boolean done = false;
         Hit hit = null;
 
         do {
             System.out.println("où frapper?");
             InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
-            // TODO call sendHit on this.opponentBoard
-
+            hit = this.opponentBoard.sendHit(hitInput.y, hitInput.x); ///////// CAREFUL WE INVERTED X AND Y, is opponent
+                                                                      ///////// Board OK?
+            coords[0] = hitInput.x;
+            coords[1] = hitInput.y;
+            done = true;
             // TODO : Game expects sendHit to return BOTH hit result & hit coords.
             // return hit is obvious. But how to return coords at the same time ?
         } while (!done);
@@ -73,4 +99,5 @@ public class Player implements java.io.Serializable {
     public void setShips(AbstractShip[] ships) {
         this.ships = ships;
     }
+
 }
