@@ -156,12 +156,11 @@ public class Board implements IBoard {
         return hits_array[x][y];
     }
     @Override
-    public Hit sendHit(int x, int y) {
+    public Hit sendHit(int x, int y) { 
         try {
 
             if (this.hasShip(x, y)) {
                 AbstractShip ship_at_hitpoint = boats_array[x][y].getShip();
-                setHit(true, x, y);
                 boats_array[x][y].addStrike();
                 if (ship_at_hitpoint.isSunk()) {
                     switch (ship_at_hitpoint.getLabel()) {
@@ -181,7 +180,6 @@ public class Board implements IBoard {
                 }
                 return Hit.STIKE;
             }
-            setHit(false, x, y);
         } catch (Exception e) {
             System.out.println(e);
         }
