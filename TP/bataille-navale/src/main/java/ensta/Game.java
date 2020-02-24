@@ -26,11 +26,20 @@ public class Game implements java.io.Serializable {
      */
     public Game() {
     }
-
+    
     public Game init(int[] n) {
-        if (!loadSave()) {
+        sin = new Scanner(System.in);
+
+        System.out.println("Voulez vous charger la précédente partie ? oui: 1 / non: 0");
+        int new_game = Integer.parseInt(sin.nextLine());
+
+        boolean save =false ;
+        if (new_game==1) {
+            save = loadSave();
+        }        
+        
+        if (!save) {
             // init attributes
-            sin = new Scanner(System.in);
             int nb_players;
             do {
                 System.out.println("nombre de joueurs (1 ou 2):");

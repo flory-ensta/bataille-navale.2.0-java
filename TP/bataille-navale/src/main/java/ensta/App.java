@@ -6,10 +6,10 @@ package ensta;
  */
 public class App {
     public static void main(String[] args) {
-        // System.out.println("Hello World!");
-        Board myBoard = new Board("myBoard");
-        myBoard.print();
-        Board myOtherBoard = new Board("myOtherBoard", 15);
-        myOtherBoard.print();
+
+        int[] n = new int[1];
+        Game newGame = new Game();
+        newGame = newGame.init(n);
+        newGame.run(n);
     }
 }

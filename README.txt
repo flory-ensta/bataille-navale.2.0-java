@@ -1,3 +1,9 @@
-Intallez Maven (sudo apt-get install maven)
+Pour lancer le projet, il faut de placer dans le dossier /TP/bataille-navale/src/main/java en effectuant la commande suivante :
 
-Vous pouvez lancer le projet avec la commande "mvn exec:java"
+``` cd ./TP/bataille-navale/src/main/java/ ```
+
+Puis on exécute la commande suivante :
+
+``` javac ensta/*.java && java ensta.App ``` 
+
+
