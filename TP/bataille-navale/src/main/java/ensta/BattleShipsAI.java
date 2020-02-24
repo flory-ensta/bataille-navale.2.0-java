@@ -65,24 +65,31 @@ public class BattleShipsAI implements Serializable {
         Direction o;
         Random rnd = new Random();
         Direction[] orientations = Direction.values();
+        boolean done = false;
+        int i = 0;
 
-        for (AbstractShip s : ships) {
-            do {
-                // TODO use Random to pick a random x, y & orientation
+        do {
+            // TODO use Random to pick a random x, y & orientation
 
-                x = rnd.nextInt((this.size) + 1);
-                y = rnd.nextInt((this.size) + 1);
-                o = orientations[rnd.nextInt(4)];
-                s.setDirection(o);
-
-            } while (!canPutShip(s, x, y));
+            x = rnd.nextInt((this.size) + 1);
+            y = rnd.nextInt((this.size) + 1);
+            o = orientations[rnd.nextInt(4)];
+            ships[i].setDirection(o);
+            boolean success = false; // = false superflu
             try {
 
-                board.putShip(s, x, y);
+                board.putShip(ships[i], x, y);
+                success = true;
             } catch (Exception e) {
                 System.out.println(e);
+            } finally {
+                if (success) {
+                    ++i;
+                    done = i == ships.length;
+                }
             }
-        }
+        } while (!done);
+
     }
 
     /**
@@ -126,10 +133,9 @@ public class BattleShipsAI implements Serializable {
             res = pickRandomCoord();
         }
 
-        Hit hit = opponent.sendHit(res[0], res[1]);
+        Hit hit = opponent.sendHit(res[1], res[0]);
         try {
-
-            board.setHit(hit != Hit.MISS, res[0], res[1]);
+            board.setHit(hit != Hit.MISS, res[1], res[0]);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -200,7 +206,8 @@ public class BattleShipsAI implements Serializable {
 
     private boolean isUndiscovered(int x, int y) {
         try {
-            return /*x >= 0 && x < size && y >= 0 && y < size &&*/ board.getHit(x, y) == null; /* exception already handled */
+            return /* x >= 0 && x < size && y >= 0 && y < size && */ board.getHit(x,
+                    y) == null; /* exception already handled */
         } catch (Exception e) {
             System.out.println(e);
             return false; // Not good for now

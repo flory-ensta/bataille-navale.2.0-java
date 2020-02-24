@@ -48,8 +48,8 @@ public class Game {
             System.out.println("Bonne chance " + username);
             b1.print();
             // place player ships
-            player1.putShips(); ///////////////// IL N'EN PLACE QUE 4 CA A DU ETRE HARDCODE
-            player2.putShips(); ///////////////// Si l'IA déborde il n'a pas le droit de replacer son boat 
+            player1.putShips();
+            player2.putShips(); 
         }
         return this;
     }
@@ -69,11 +69,11 @@ public class Game {
         do {
             hit = Hit.MISS; // DONE player1 send a hit
             b2.print(); // TODO Remove
-            hit = player1.sendHit(coords);
+            hit = player1.sendHit(coords); // PB écrit aussi dans l'opponent board 
+
             boolean strike = hit != Hit.MISS; // DONE set this hit on his board (b1)
-            try {
-                
-                b1.setHit(strike,coords[0],coords[1]); /// WE INVERTED???
+            try {            
+                b1.setHit(strike,coords[1],coords[0]); 
             } catch (Exception e) {
                System.out.println(e);
             }
@@ -87,7 +87,7 @@ public class Game {
             if (!done && !strike) {
                 do {
                     hit = Hit.MISS; // DONE player2 send a hit.
-                    player2.sendHit(coords);
+                    hit = player2.sendHit(coords); // Pb d'IA, elle se focus sur un truc alors qu'il est coulé 
 
                     strike = hit != Hit.MISS;
                     if (strike) {

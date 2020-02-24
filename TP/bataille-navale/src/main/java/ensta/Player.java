@@ -63,7 +63,7 @@ public class Player {
 
                 if (success) {
                     ++i;
-                    done = i == 4;
+                    done = i == ships.length;
                 }
 
                 board.print();
@@ -78,7 +78,7 @@ public class Player {
         do {
             System.out.println("où frapper?");
             InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
-            hit = this.opponentBoard.sendHit(hitInput.y, hitInput.x); ///////// CAREFUL WE INVERTED X AND Y
+            hit = this.opponentBoard.sendHit(hitInput.y, hitInput.x); ///////// CAREFUL WE INVERTED X AND Y, is opponent Board OK?
             coords[0]=hitInput.x;
             coords[1]=hitInput.y;
             done=true;
