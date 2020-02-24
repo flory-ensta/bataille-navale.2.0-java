@@ -1,9 +1,9 @@
 import java.io.Serializable;
 import java.util.List;
 
-public class Player {
-    /* **
-     * Attributs
+public class Player implements java.io.Serializable {
+    /*
+     * ** Attributs
      */
     protected Board board;
     protected Board opponentBoard;
@@ -11,8 +11,10 @@ public class Player {
     protected AbstractShip[] ships;
     protected boolean lose;
 
-    /* **
-     * Constructeur
+    private static final long serialVersionUID = 1L;
+
+    /*
+     * ** Constructeur
      */
     public Player(Board board, Board opponentBoard, List<AbstractShip> ships) {
         this.board = board;
@@ -20,12 +22,13 @@ public class Player {
         this.opponentBoard = opponentBoard;
     }
 
-    /* **
-     * Méthodes
+    /*
+     * ** Méthodes
      */
 
     /**
-     * Read keyboard input to get ships coordinates. Place ships on given coodrinates.
+     * Read keyboard input to get ships coordinates. Place ships on given
+     * coodrinates.
      */
     public void putShips() {
         boolean done = false;

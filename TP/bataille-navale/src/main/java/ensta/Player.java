@@ -3,7 +3,7 @@ package ensta;
 import java.io.Serializable;
 import java.util.List;
 
-public class Player {
+public class Player implements java.io.Serializable {
     /*
      * ** Attributs
      */
@@ -12,6 +12,8 @@ public class Player {
     protected int destroyedCount;
     protected AbstractShip[] ships;
     protected boolean lose;
+
+    private static final long serialVersionUID = 1L;
 
     /*
      * ** Constructeur
@@ -40,18 +42,18 @@ public class Player {
             System.out.println(msg);
             InputHelper.ShipInput res = InputHelper.readShipInput();
             switch (res.orientation) {
-            case "n":
-                s.setDirection(Direction.NORTH);
-                break;
-            case "s":
-                s.setDirection(Direction.SOUTH);
-                break;
-            case "e":
-                s.setDirection(Direction.EAST);
-                break;
-            case "w":
-                s.setDirection(Direction.WEST);
-                break;
+                case "n":
+                    s.setDirection(Direction.NORTH);
+                    break;
+                case "s":
+                    s.setDirection(Direction.SOUTH);
+                    break;
+                case "e":
+                    s.setDirection(Direction.EAST);
+                    break;
+                case "w":
+                    s.setDirection(Direction.WEST);
+                    break;
             }
             boolean success = false;
             try {
@@ -72,16 +74,17 @@ public class Player {
     }
 
     public Hit sendHit(int[] coords) {
-        boolean done=false;
+        boolean done = false;
         Hit hit = null;
 
         do {
             System.out.println("où frapper?");
             InputHelper.CoordInput hitInput = InputHelper.readCoordInput();
-            hit = this.opponentBoard.sendHit(hitInput.y, hitInput.x); ///////// CAREFUL WE INVERTED X AND Y, is opponent Board OK?
-            coords[0]=hitInput.x;
-            coords[1]=hitInput.y;
-            done=true;
+            hit = this.opponentBoard.sendHit(hitInput.y, hitInput.x); ///////// CAREFUL WE INVERTED X AND Y, is opponent
+                                                                      ///////// Board OK?
+            coords[0] = hitInput.x;
+            coords[1] = hitInput.y;
+            done = true;
             // TODO : Game expects sendHit to return BOTH hit result & hit coords.
             // return hit is obvious. But how to return coords at the same time ?
         } while (!done);
