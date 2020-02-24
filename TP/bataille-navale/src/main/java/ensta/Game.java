@@ -27,30 +27,54 @@ public class Game implements java.io.Serializable {
     public Game() {
     }
 
-    public Game init() {
+    public Game init(int[] n) {
         if (!loadSave()) {
             // init attributes
             sin = new Scanner(System.in);
+            int nb_players;
+            do {
+                System.out.println("nombre de joueurs (1 ou 2):");
+                nb_players = Integer.parseInt(sin.nextLine());
+            } while (!(nb_players == 1 || nb_players == 2));
             System.out.println("entre ton nom:");
 
             // DONE use a scanner to read player name
             String username = sin.nextLine();
+            String username2 = "AI";
+            if (nb_players == 2) {
+                System.out.println("entre le nom de ton ami:");
+                username2 = sin.nextLine();
+            }
 
             // DONE init boards
             Board b1, b2;
             b1 = new Board(username, 15);
-            b2 = new Board("AI", 15);
+
+            b2 = new Board(username2, 15);
+
             // DONE init this.player1 & this.player2
             List<AbstractShip> ships1 = createDefaultShips();
             this.player1 = new Player(b1, b2, ships1);
             List<AbstractShip> ships2 = createDefaultShips();
-            this.player2 = new AIPlayer(b2, b1, ships2);
+            if (nb_players == 1)
+                this.player2 = new AIPlayer(b2, b1, ships2);
+            else
+                this.player2 = new Player(b2, b1, ships2);
 
-            System.out.println("Bonne chance " + username);
             b1.print();
             // place player ships
+            System.out.println(username + " place ses bateaux...");
             player1.putShips();
+
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+
+            System.out.println(username2 + " place ses bateaux...");
             player2.putShips();
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+
+            n[0] = nb_players;
         }
         return this;
     }
@@ -58,19 +82,29 @@ public class Game implements java.io.Serializable {
     /*
      * *** Méthodes
      */
-    public void run() {
+    public void run(int[] n) {
+        int nb_players = n[0];
         int[] coords = new int[2];
         Board b1 = player1.board;
-        Board b2 = player2.board; //// TODO Remove this
+        Board b2 = player2.board;
         Hit hit;
 
         // main loop
-        b1.print();
         boolean done;
         do {
+            if (nb_players == 2) {
+
+                if (nb_players == 2) {
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+
+                }
+                System.out.println("Joueur 1 à vous! (appuyez sur entrée)");
+                sin.nextLine();
+            }
+            b1.print();
             hit = Hit.MISS; // DONE player1 send a hit
-            b2.print(); // TODO Remove
-            hit = player1.sendHit(coords); // PB écrit aussi dans l'opponent board
+            hit = player1.sendHit(coords);
 
             boolean strike = hit != Hit.MISS; // DONE set this hit on his board (b1)
             try {
@@ -82,22 +116,40 @@ public class Game implements java.io.Serializable {
             done = updateScore();
             b1.print();
             System.out.println(makeHitMessage(false /* outgoing hit */, coords, hit));
+            try {
+                Thread.sleep(2500);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
 
             save();
 
             if (!done && !strike) {
                 do {
+                    if (nb_players == 2) {
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
+                        System.out.println("Au tour du joueur 2 (appuyez sur entrée)");
+                        sin.nextLine();
+                        b2.print();
+                    }
                     hit = Hit.MISS; // DONE player2 send a hit.
-                    hit = player2.sendHit(coords); // Pb d'IA, elle se focus sur un truc alors qu'il est coulé
+                    hit = player2.sendHit(coords);
 
                     strike = hit != Hit.MISS;
-                    if (strike) {
-                        b1.print();
+                    if (nb_players == 2) {
+
+                        try {
+                            b2.setHit(strike, coords[1], coords[0]);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
                     }
-                    System.out.println(makeHitMessage(true /* incoming hit */, coords, hit));
+                    System.out.println(makeHitMessage(true /* inc3oming hit */, coords, hit));
                     done = updateScore();
 
                     if (!done) {
+
                         save();
                     }
                 } while (strike && !done);
