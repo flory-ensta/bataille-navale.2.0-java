@@ -149,6 +149,10 @@ public class BattleShipsAI implements Serializable {
             }
             lastStrike = res;
         }
+        else {
+            lastVertical = null;
+            lastStrike = null;
+        }
 
         coords[0] = res[0];
         coords[1] = res[1];
@@ -209,8 +213,8 @@ public class BattleShipsAI implements Serializable {
 
     private boolean isUndiscovered(int x, int y) {
         try {
-            return /* x >= 0 && x < size && y >= 0 && y < size && */ board.getHit(x,
-                    y) == null; /* exception already handled */
+            return /* x >= 0 && x < size && y >= 0 && y < size && */ board.getHit(y,
+                    x) == null; /* exception already handled */
         } catch (Exception e) {
             System.out.println(e);
             return false; // Not good for now
