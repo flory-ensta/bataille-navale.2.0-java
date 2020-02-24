@@ -115,8 +115,7 @@ public class Game {
             b1.print();
             System.out.println(makeHitMessage(false /* outgoing hit */, coords, hit));
             try {
-
-                Thread.sleep(1000);
+                Thread.sleep(2500);
             } catch (Exception e) {
                 System.out.println(e);
             }
