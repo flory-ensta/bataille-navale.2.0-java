@@ -1,8 +1,13 @@
 package ensta;
 
-public class ShipState {
+import java.io.Serializable;
+
+public class ShipState implements java.io.Serializable {
     private AbstractShip ship;
     private boolean struck;
+
+    private static final long serialVersionUID = 1L;
+
 
     public ShipState() {
         // this.ship = new AbstractShip(); On ne l'initialise pas et on le laisse à null si pas de bateau.

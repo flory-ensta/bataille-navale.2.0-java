@@ -2,14 +2,17 @@ package ensta;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 
-public class Board implements IBoard {
+public class Board implements IBoard, java.io.Serializable {
     private Character[] charArray = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
             'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
     protected String name;
     protected ShipState[][] boats_array;
     protected Boolean[][] hits_array;
     protected int size;
+
+    private static final long serialVersionUID = 1L;
 
     public Board(String name, int size) { // ( Check size < 26 later)
         this.name = name;
@@ -143,20 +146,23 @@ public class Board implements IBoard {
             return false;
         return (boats_array[x][y].getShip() != null);
     }
+
     @Override
     public void setHit(Boolean hit, int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         hits_array[x][y] = hit;
     }
+
     @Override
     public Boolean getHit(int x, int y) throws OutOfBound {
         if (x < 0 || x >= size || y < 0 || y >= size)
             throw new OutOfBound("Positions incorrectes");
         return hits_array[x][y];
     }
+
     @Override
-    public Hit sendHit(int x, int y) { 
+    public Hit sendHit(int x, int y) {
         try {
 
             if (this.hasShip(x, y)) {

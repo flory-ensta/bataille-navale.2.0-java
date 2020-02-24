@@ -1,14 +1,18 @@
 package ensta;
 
+import java.io.Serializable;
+
 /**
  * AbstractShip
  */
-public class  AbstractShip {
+public class AbstractShip implements java.io.Serializable {
     private Character label;
     private String name;
     private int size;
     private Direction direction;
     private int strike_count;
+
+    private static final long serialVersionUID = 1L;
 
     public Character getLabel() {
         return label;
@@ -19,7 +23,7 @@ public class  AbstractShip {
     }
 
     public boolean isSunk() {
-        return (strike_count==size);
+        return (strike_count == size);
     }
 
     public void setLabel(Character label) {

@@ -80,17 +80,9 @@ public class BattleShipsAI implements Serializable {
 
                 board.putShip(ships[i], x, y);
                 ++i;
-                // success = true;
             } catch (Exception e) {
                 System.out.println(e);
             }
-            // a virer
-            // finally {
-            // if (success) {
-            // done = i == ships.length;
-            // }
-            // }
-
         } while (i < ships.length);
 
     }
