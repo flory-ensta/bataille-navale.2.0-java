@@ -6,4 +6,4 @@ Puis on exécute la commande suivante :
 
 ``` javac ensta/*.java && java ensta.App ``` 
 
-
+On précise que la sauvegarde de partie ne fonctionne pas comme voulu pour le mode 2 joueurs mais fonctionne bien pour le mode 1 joueur.
